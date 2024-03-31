@@ -294,7 +294,7 @@
                     
                    
  </section>
- <div class="container">
+<div class="container">
     <h1>Blog Post</h1>
     <div id="comments-container">
         <!-- Comments will be dynamically added here -->
@@ -314,37 +314,20 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const commentForm = document.getElementById('comment-form');
+    fetch('https://tajaneyash.github.io/FlyWithYashBlogs.github.io/issues?labels=comment')
+    .then(response => response.json())
+    .then(comments => {
         const commentsContainer = document.getElementById('comments-container');
-
-        commentForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const nameInput = document.getElementById('name');
-            const commentInput = document.getElementById('comment');
-
-            const name = nameInput.value.trim();
-            const comment = commentInput.value.trim();
-
-            if (name !== '' && comment !== '') {
-                addComment(name, comment);
-                nameInput.value = '';
-                commentInput.value = '';
-            } else {
-                alert('Please fill in all fields.');
-            }
-        });
-
-        function addComment(name, comment) {
+        comments.forEach(comment => {
             const commentElement = document.createElement('div');
             commentElement.classList.add('comment');
             commentElement.innerHTML = `
-                <p><strong>${name}:</strong> ${comment}</p>
+                <p><strong>${comment.user.login}:</strong> ${comment.body}</p>
             `;
-            commentsContainer.prepend(commentElement);
-        }
-    });
+            commentsContainer.appendChild(commentElement);
+        });
+    })
+    .catch(error => console.error('Error fetching comments:', error));
 </script>
 
     <!-- footer css start -->
